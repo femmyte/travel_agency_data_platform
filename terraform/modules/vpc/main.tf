@@ -1,58 +1,72 @@
-resource "aws_vpc" "agency_vpc" {
-  cidr_block       = "10.0.0.0/16"
-  instance_tenancy = "default"
+resource "aws_vpc" "femmyte_vpc" {
+  cidr_block = "172.16.0.0/16"
+}
 
+resource "aws_subnet" "redshift_subnet_a" {
+  vpc_id     = aws_vpc.femmyte_vpc.id
+  cidr_block ="172.16.24.0/24"
+ availability_zone = var.azs[0]
   tags = {
-    Name = var.VPC_NAME
+    Name = "zone_a"
   }
 }
 
-# create subnets for RDS instances
-resource "aws_subnet" "rds_subnets" {
-  count             = 3
-  vpc_id            = aws_vpc.agency_vpc.id
-  cidr_block        = element(["10.0.24.0/24", "10.0.25.0/24", "10.0.26.0/24"], count.index)
-  availability_zone = var.azs[count.index]
+resource "aws_subnet" "redshift_subnet_b" {
+  vpc_id     = aws_vpc.femmyte_vpc.id
+  cidr_block = "172.16.25.0/24"
+ availability_zone = var.azs[1]
   tags = {
-    Name = "${var.RESOURCE_PREFIX}-private-RDS-${element(["a", "b", "c"], count.index)}"
+    Name = "zone_b"
   }
 }
 
-# create an internet gateway
-resource "aws_internet_gateway" "femmyte_igw" {
-  vpc_id = aws_vpc.agency_vpc.id
+resource "aws_redshift_subnet_group" "redshift_subnet_group" {
+  name       = "foo"
+  subnet_ids = [aws_subnet.redshift_subnet_a.id, aws_subnet.redshift_subnet_b.id]
 
   tags = {
-    Name = "Agency VPC Internet Gateway"
+    environment = "redshift subnet group"
   }
 }
 
-# attach the internet gateway to the VPC
-resource "aws_internet_gateway_attachment" "example" {
-  internet_gateway_id = aws_internet_gateway.femmyte_igw.id
-  vpc_id              = aws_vpc.agency_vpc.id
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.femmyte_vpc.id
+
+  tags = {
+    Name = "femmyte_igw"
+  }
 }
 
-# create a network interface for the RDS instance to use as a network interface for the VPC
-resource "aws_network_interface" "test" {
-  count     = 3
-  subnet_id = aws_subnet.rds_subnets[count.index].id
-}
-
-# create a route table for the VPC
-resource "aws_route_table" "femmyte_rt" {
-  vpc_id = aws_vpc.agency_vpc.id
-  count = 3
+resource "aws_route_table" "default" {
+  vpc_id = aws_vpc.femmyte_vpc.id
 
   route {
-    cidr_block           = aws_vpc.agency_vpc.cidr_block
-    network_interface_id = aws_network_interface.test[count.index].id
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
   }
 }
 
-# associate the route table with the internet gateway
+resource "aws_route_table_association" "a" {
+  subnet_id      = aws_subnet.redshift_subnet_a.id
+  route_table_id = aws_route_table.default.id
+}
 resource "aws_route_table_association" "b" {
-  gateway_id     = aws_internet_gateway.femmyte_igw.id
-  count = 3
-  route_table_id = aws_route_table.femmyte_rt[count.index].id
+  subnet_id      = aws_subnet.redshift_subnet_b.id
+  route_table_id = aws_route_table.default.id
+}
+
+resource "aws_default_security_group" "default" {
+  vpc_id = aws_vpc.femmyte_vpc.id
+
+  ingress {
+    description = "Allow inbound connections from Redshift"
+    protocol  = "tcp"
+    from_port = 5439
+    to_port   = 5439
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    "Namw" = "redshift_security_group"
+  }
 }

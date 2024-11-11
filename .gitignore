@@ -3,3 +3,9 @@ venv
 terraform/terraform.tfstate.backup
 terraform/terraform.tfstate
 terraform/.terraform/
+.env
+airflow/logs
+*__pycache__*
+airflow/airflow.db
+*.csv
+terraform/.terraform.lock.hcl

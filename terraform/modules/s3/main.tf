@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "example" {
-  bucket = "femmyte-travel-agency-bucket"
+  bucket = "travel-agency-bucket"
 }
 
 resource "aws_s3_bucket_ownership_controls" "example" {
