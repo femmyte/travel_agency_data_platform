@@ -1,0 +1,19 @@
+name: code linter
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    code_linting:
+        name: python code linting check
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: advanced-security/python-lint-code-scanning-action@v1
+              with:
+                  linter: flake8
