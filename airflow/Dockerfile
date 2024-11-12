@@ -1,4 +1,5 @@
-FROM python:3.9
+# FROM python:3.9
+FROM python:3.10-alpine3.18
 
 WORKDIR /usr/local/airflow
 
