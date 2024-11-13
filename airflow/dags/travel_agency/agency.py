@@ -3,10 +3,8 @@ from datetime import datetime
 from airflow.operators.python import PythonOperator
 from travel_agency.includes.publish_data import store_data_on_lake
 from travel_agency.includes.retrieve_data import retrieve_and_process_data
-# from airflow.providers.amazon.aws.operators.redshift_sql import RedshiftSQLOperator
-from airflow.providers.amazon.aws.hooks.redshift_sql import RedshiftExecuteSqlOperator
+from airflow.providers.amazon.aws.operators.redshift_data import RedshiftDataOperator
 from airflow.providers.amazon.aws.transfers.s3_to_redshift import S3ToRedshiftOperator
-
 
 with DAG(
     dag_id='country_data_extraction',
@@ -25,23 +23,27 @@ with DAG(
         task_id='retrieve_data',
         python_callable=retrieve_and_process_data
     )
-    create_table_task = RedshiftExecuteSqlOperator(
-        task_id='create_country_info_table',
-        redshift_conn_id='redshift_default',
-        params={
-            "schema": "public",
-            "table": "country_info",
-        },
-        sql='/create_agency_table.sql',
-    )
-    # redshift_sql_operator = RedshiftSQLOperator(
-    #     task_id='redshift_sql_operator',
-    #     sql="",
+    # create_table_task = RedshiftDataOperator(
+    #     task_id='create_country_info_table',
+    #     redshift_conn_id='redshift_default',
     #     params={
     #         "schema": "public",
     #         "table": "country_info",
     #     },
+    #     sql='/create_agency_table.sql',
     # )
+    # create redshift table
+    create_table_task = RedshiftDataOperator(
+        task_id="create_agency_table",
+        sql="/create_agency_table.sql",
+        database='dev',
+        # cluster_id='travel_agency',
+        params={
+            "schema": "public",
+            "table": "country_info",
+        },
+    )
+    # get transformed data from s3 bucket
     s3_to_redshift = S3ToRedshiftOperator(
         task_id='s3_to_redshift',
         schema='public',
