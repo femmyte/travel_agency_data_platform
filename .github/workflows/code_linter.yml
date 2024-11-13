@@ -19,4 +19,4 @@ jobs:
                   python -m pip install flake8
             - name: Lint code
               run: |
-                  flake8 airflow/travel_agency/dags/includes
+                  flake8
