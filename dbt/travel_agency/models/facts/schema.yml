@@ -1,0 +1,23 @@
+version: 2
+
+models:
+    - name: fact_country_population
+      description:
+          'Fact table storing measurable data related to countries such as
+          population and area.'
+      columns:
+          - name: country_id
+            description: 'Foreign key linking to the dim_country table.'
+            tests:
+                - not_null
+                - relationships:
+                      to: ref('dim_country')
+                      field: country_id
+          - name: population
+            description: 'Population of the country.'
+            tests:
+                - not_null
+          - name: area
+            description: 'Total area of the country in square kilometers.'
+          - name: created_at
+            description: 'Timestamp when the population data was recorded.'

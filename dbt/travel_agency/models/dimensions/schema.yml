@@ -1,0 +1,42 @@
+version: 2
+
+models:
+    - name: dim_country
+      description:
+          'Dimension table storing country-related descriptive information.'
+      columns:
+          - name: country_id
+            description: 'Unique identifier for each country.'
+            tests:
+                - not_null
+                - unique
+          - name: common_name
+            description: 'Common name of the country.'
+          - name: official_name
+            description: 'Official name of the country.'
+          - name: capital
+            description: 'Capital city of the country.'
+          - name: region
+            description: 'Geographical region of the country.'
+          - name: subregion
+            description: 'Subregion of the country.'
+          - name: languages
+            description:
+                'Official languages spoken in the country (stored as JSONB).'
+          - name: currency_code
+            description: "ISO code for the country's currency."
+          - name: currency_name
+            description: "Name of the country's currency."
+          - name: currency_symbol
+            description: "Symbol for the country's currency."
+          - name: continents
+            description: 'Continent(s) associated with the country.'
+          - name: created_at
+            description: 'Timestamp when the record was created.'
+          - name: updated_at
+            description: 'Timestamp when the record was last updated.'
+
+tests:
+    - unique:
+          name: 'dim_country_country_id_unique'
+          description: 'Ensure that the country_id is unique for each country.'
