@@ -1,8 +1,8 @@
 resource "aws_redshift_cluster" "example" {
-  cluster_identifier = "tf-redshift-cluster"
-  database_name      = "mydb"
-  master_username    = "exampleuser"
-  master_password    = "Mustbe8characters"
+  cluster_identifier = "travel_agency"
+  database_name      = "dev"
+  master_username    = "femmyte"
+  master_password    = "ThisIsTestPassword1"
   node_type          = "dc2.large"
   cluster_type       = "multi-node"
   number_of_nodes = 2

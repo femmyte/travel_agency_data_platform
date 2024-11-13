@@ -9,10 +9,10 @@
 #   VPC_NAME            = local.VPC_NAME
 # }
 
-# module "s3" {
-#   source = "./modules/s3"
+module "s3" {
+  source = "./modules/s3"
 
-# }
+}
 
 # module "roles" {
 #   source = "./modules/roles"
@@ -24,9 +24,9 @@
 #   redshift_role_arn = module.roles.redshift_role_arn
 # }
 
-module "ecr" {
-  source = "./modules/ecr"
-}
+# module "ecr" {
+#   source = "./modules/ecr"
+# }
 
 # module "rds" {
 #   source          = "./modules/rds"

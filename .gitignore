@@ -10,3 +10,6 @@ airflow/airflow.db
 *.csv
 terraform/.terraform.lock.hcl
 README.md
+dbt/travel_agency/target/
+dbt/travel_agency/dbt_packages/
+dbt/travel_agency/logs/
