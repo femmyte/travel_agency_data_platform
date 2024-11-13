@@ -12,8 +12,10 @@ def retrieve_and_process_data():
     )
 
     # Process and transform the necessary data
-    columns_of_interest = ["name", "independent", "unMember", "startOfWeek",     "currencies",
-                           "idd", "capital", "region", "subregion", "languages", "area", "population", "continents"]
+    columns_of_interest = (
+        ["name", "independent", "unMember", "startOfWeek",
+         "currencies", "idd", "capital", "region", "subregion",
+         "languages", "area", "population", "continents"])
     data = df.loc[:, columns_of_interest]
     logging.info("Data retrieved successfully")
     data = transform_data(data)
@@ -30,12 +32,16 @@ def transform_data(data):
     data['official_name'] = data['name'].apply(
         lambda x: x.get('official') if isinstance(x, dict) else None)
 
-    # Safely extracting the currency_code dynamically from the 'currencies' field
-    # assuming that each country has one currency, and extract the currency code from the key in 'currencies'
-    data['currency_code'] = data['currencies'].apply(
-        lambda x: ', '.join([k for k, v in x.items() if v is not None]) if isinstance(
-            x, dict) and x else None
-    )
+    # Safely extracting the currency_code dynamically
+    # from the 'currencies' field
+    # assuming that each country has one currency,
+    # and extract the currency code from the key in 'currencies'
+    data['currency_code'] = (
+        data['currencies'].apply(
+            lambda x: ', '.join([k for k, v in x.items()
+                                 if v is not None]) if isinstance(
+                x, dict) and x else None
+        ))
     # Get currency name
     data['currency_name'] = data['currencies'].apply(
         lambda x: next((v['name']
@@ -51,8 +57,10 @@ def transform_data(data):
     )
 
     # Handling 'idd' safely (concatenating root and suffixes)
-    data['idd'] = data['idd'].apply(lambda x: f"{x.get('root', '')}{''.join(x.get('suffixes', []))}"
-                                    if isinstance(x, dict) and x.get('root') else None)
+    data['idd'] = (
+        data['idd'].apply(lambda x: f"{x.get('root', '')}
+                          {''.join(x.get('suffixes', []))}"
+                          if isinstance(x, dict) and x.get('root') else None))
 
     # Extracting region and subregion
     data['region'] = data['region'].apply(

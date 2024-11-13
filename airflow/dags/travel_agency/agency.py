@@ -2,15 +2,20 @@ from airflow import DAG
 from datetime import datetime
 from airflow.operators.python import PythonOperator
 from travel_agency.includes.publish_data import store_data_on_lake
-from travel_agency.includes.retrieve_data import retrieve_and_process_data
-from airflow.providers.amazon.aws.operators.redshift_data import RedshiftDataOperator
-from airflow.providers.amazon.aws.transfers.s3_to_redshift import S3ToRedshiftOperator
+from travel_agency.includes.retrieve_data import (
+    retrieve_and_process_data)
+from airflow.providers.amazon.aws.operators.redshift_data import (
+    RedshiftDataOperator)
+from airflow.providers.amazon.aws.transfers.s3_to_redshift import (
+    S3ToRedshiftOperator)
 
 with DAG(
     dag_id='country_data_extraction',
     start_date=datetime(2023, 11, 9),
     schedule_interval='@daily',
-    template_searchpath="/home/femmyte/Desktop/projects/CDE/travel_agency/airflow/dags/travel_agency/sql"
+    template_searchpath=(
+        "/home/femmyte/Desktop/projects/CDE/travel_agency/airflow/"
+        "dags/travel_agency/sql")
 ):
 
     download_data = PythonOperator(
