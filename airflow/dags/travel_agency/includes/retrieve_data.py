@@ -12,10 +12,11 @@ def retrieve_and_process_data():
     )
 
     # Process and transform the necessary data
-    columns_of_interest = (
-        ["name", "independent", "unMember", "startOfWeek",
-         "currencies", "idd", "capital", "region", "subregion",
-         "languages", "area", "population", "continents"])
+    columns_of_interest = [
+        "name", "independent", "unMember", "startOfWeek",
+        "currencies", "idd", "capital", "region", "subregion",
+        "languages", "area", "population", "continents"
+    ]
     data = df.loc[:, columns_of_interest]
     logging.info("Data retrieved successfully")
     data = transform_data(data)
@@ -57,10 +58,9 @@ def transform_data(data):
     )
 
     # Handling 'idd' safely (concatenating root and suffixes)
-    data['idd'] = (
-        data['idd'].apply(lambda x: f"{x.get('root', '')}{
-            ''.join(x.get('suffixes', []))}"
-            if isinstance(x, dict) and x.get('root') else None))
+    data['idd'] = data['idd'].apply(
+        lambda x: f"{x.get('root', '')}{''.join(x.get('suffixes', []))}"
+        if isinstance(x, dict) and x.get('root') else None)
 
     # Extracting region and subregion
     data['region'] = data['region'].apply(
