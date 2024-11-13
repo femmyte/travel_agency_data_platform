@@ -58,8 +58,8 @@ def transform_data(data):
 
     # Handling 'idd' safely (concatenating root and suffixes)
     data['idd'] = (
-        data['idd'].apply(lambda x: f"{x.get('root', '')}
-                          {''.join(x.get('suffixes', []))}"
+        data['idd'].apply(lambda x:
+                          f"{x.get('root', '')}{''.join(x.get('suffixes', []))}"
                           if isinstance(x, dict) and x.get('root') else None))
 
     # Extracting region and subregion
