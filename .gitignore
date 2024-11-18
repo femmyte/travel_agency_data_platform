@@ -3,6 +3,7 @@ venv
 terraform/terraform.tfstate.backup
 terraform/terraform.tfstate
 terraform/.terraform/
+terraform/vars.tf
 .env
 airflow/logs
 *__pycache__*
@@ -10,6 +11,7 @@ airflow/airflow.db
 *.csv
 terraform/.terraform.lock.hcl
 README.md
-dbt/travel_agency/target/
 dbt/travel_agency/dbt_packages/
 dbt/travel_agency/logs/
+airflow/airflow-webserver.pid
+dbt/logs/
