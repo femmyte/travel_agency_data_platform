@@ -1,7 +1,6 @@
 import awswrangler as wr
 from travel_agency.includes.utils import aws_session, logging
 from travel_agency.includes.publish_data import store_data_on_lake
-from datetime import datetime
 import pandas as pd
 
 
@@ -121,7 +120,8 @@ def extract_all_common_native_names(df):
             # Drop rows with NaN in column
             native_names = df['name'].dropna()
             for i, details in native_names.items():
-                if details and isinstance(details, dict) and 'common' in details:
+                if (details and isinstance(details, dict) and
+                        'common' in details):
                     selected_name.append({
                         "common_native_names": details['common']
                     })
@@ -140,7 +140,8 @@ def extract_languages(flat_data, df):
         for lang_dict in languages:
             if isinstance(lang_dict, dict):
                 for lang_code, lang_name in lang_dict.items():
-                    if lang_name:  # Only include languages where the name is not None
+                    # Only include languages where the name is not None
+                    if lang_name:
                         selected_languages.append({
                             "language": lang_name
                         })
