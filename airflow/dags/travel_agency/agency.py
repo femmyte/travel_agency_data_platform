@@ -2,7 +2,7 @@ from airflow import DAG
 from datetime import datetime
 from airflow.operators.python import PythonOperator
 from travel_agency.includes.publish_data import store_data_on_lake
-from retrieve_data import (
+from travel_agency.includes.retrieve_data import (
     retrieve_and_process_data)
 from airflow.providers.amazon.aws.operators.redshift_data import (
     RedshiftDataOperator)
@@ -49,7 +49,9 @@ with DAG(
         schema='public',
         table='country_info',
         s3_bucket='travel-agency-bucket',
-        s3_key='processed_data/0854d86a2f33418fa7b0911f9f26b2a6.snappy.parquet',
+        s3_key=(
+            'processed_data/0854d86a2f33418fa7b0911f9f26b2a6.snappy.parquet'
+        ),
         redshift_conn_id='redshift_default',
         aws_conn_id='aws_default',
         copy_options=[
