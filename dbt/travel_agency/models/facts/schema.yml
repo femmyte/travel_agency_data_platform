@@ -19,5 +19,3 @@ models:
                 - not_null
           - name: area
             description: 'Total area of the country in square kilometers.'
-          - name: created_at
-            description: 'Timestamp when the population data was recorded.'

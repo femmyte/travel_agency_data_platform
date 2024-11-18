@@ -10,7 +10,7 @@ models:
             tests:
                 - not_null
                 - unique
-          - name: common_name
+          - name: country_name
             description: 'Common name of the country.'
           - name: official_name
             description: 'Official name of the country.'
@@ -31,10 +31,6 @@ models:
             description: "Symbol for the country's currency."
           - name: continents
             description: 'Continent(s) associated with the country.'
-          - name: created_at
-            description: 'Timestamp when the record was created.'
-          - name: updated_at
-            description: 'Timestamp when the record was last updated.'
 
 tests:
     - unique:
