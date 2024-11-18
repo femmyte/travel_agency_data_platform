@@ -1,12 +1,11 @@
-{{ config(materialized='table') }}
+{{ config(materialized='view') }}
 with base as (
     select
         id as country_id,              
         population,                    
-        area,                          
-        created_at                     
-    from {{ ref('raw_country_data') }} 
+        area                 
+    from country_info
     where population is not null       
 )
 
-select * from base;
+select * from base
