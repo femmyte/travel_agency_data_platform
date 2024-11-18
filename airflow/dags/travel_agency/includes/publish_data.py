@@ -10,7 +10,7 @@ def store_data_on_lake(dir, data=None):
         DataFrame = data
     wr.s3.to_parquet(
         df=DataFrame,
-        path=f"s3://travel-agency-bucket/{dir}/",
+        path=f"s3://travel-agency-bucket/{dir}",
         boto3_session=aws_session(),
         mode="overwrite",
         dataset=True

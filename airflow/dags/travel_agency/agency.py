@@ -13,6 +13,7 @@ with DAG(
     dag_id='country_data_extraction',
     start_date=datetime(2023, 11, 9),
     schedule_interval='@daily',
+    description="new updated",
     template_searchpath=(
         "/home/femmyte/Desktop/projects/CDE/travel_agency/airflow/"
         "dags/travel_agency/sql")
@@ -42,7 +43,9 @@ with DAG(
         task_id="create_agency_table",
         sql="/create_agency_table.sql",
         database='dev',
-        # cluster_id='travel_agency',
+        cluster_identifier="travel-agency",
+        db_user="femmyte",
+        wait_for_completion=True,
         params={
             "schema": "public",
             "table": "country_info",
@@ -53,14 +56,19 @@ with DAG(
         task_id='s3_to_redshift',
         schema='public',
         table='country_info',
-        s3_bucket='airflow-redshift-demo',
-        s3_key='travel-agency-bucket/processed_data',
+        s3_bucket='travel-agency-bucket',
+        s3_key='processed_data/0854d86a2f33418fa7b0911f9f26b2a6.snappy.parquet',
         redshift_conn_id='redshift_default',
         aws_conn_id='aws_default',
         copy_options=[
-            "DELIMITER AS ','"
+            "FORMAT AS PARQUET"
         ],
-        method='REPLACE'
+        method='REPLACE',
+        # column_list=[
+        #     "common_name", "independent", "unMember", "startOfWeek", "official_name",
+        #     "idd", "capital", "region", "subregion", "languages", "area", "population",
+        #     "currency_code", "currency_name", "currency_symbol", "continents"
+        # ]
     )
 
 

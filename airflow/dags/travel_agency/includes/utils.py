@@ -28,8 +28,15 @@ url = "https://restcountries.com/v3.1/all"
 
 
 def get_country_data():
-    response = requests.get(url)
-    response_json = response.json()
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            response_json = response.json()
 
-    data = pd.DataFrame(response_json)
+            data = pd.DataFrame(response_json)
+        else:
+            return 'something went wrong'
+    except Exception as e:
+        logging.error(e)
+        raise e
     return data
