@@ -1,8 +1,8 @@
 resource "aws_redshift_cluster" "example" {
-  cluster_identifier = "travel_agency"
-  database_name      = "dev"
-  master_username    = "femmyte"
-  master_password    = "ThisIsTestPassword1"
+  cluster_identifier = var.cluster_identifier
+  database_name      = var.database_name
+  master_username    = var.username
+  master_password    = var.password
   node_type          = "dc2.large"
   cluster_type       = "multi-node"
   number_of_nodes = 2
