@@ -1,0 +1,36 @@
+name: build and push code to ecr registry
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    build_image:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: checkout to repo
+              uses: actions/checkout@v4
+
+            - name: configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+                  aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+                  aws-region: ${{secrets.AWS_REGION}}
+            - name: login amazon ecr
+              id: login_to_ecr
+              uses: aws-actions/amazon-ecr-login@v2
+
+            - name: build and push the tagged image to ecr
+              env:
+                  ECR_REGISTRY: ${{steps.login_to_ecr.outputs.registry}}
+                  ECR_REPOSITORY: travel_agency_ecr
+                  IMAGE_TAG: latest
+              run: |
+                  docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./airflow/
+                  docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
