@@ -17,6 +17,3 @@ def store_data_on_lake(dir, data=None):
     )
     logging.info(f"Data stored on {dir} S3 successfully")
     return "Data stored on S3 successfully"
-
-
-# logging.info(store_data_on_lake())

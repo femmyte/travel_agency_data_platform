@@ -33,9 +33,10 @@ def transform_data(df):
 
     # Columns of interest
     columns_of_interest = [
-        "name.common", "name.official", 'name', "independent", "unMember", "startOfWeek",
-        "currencies", "capital", "region", "subregion",
-        "languages", "area", "population", "continents", "idd.root", "idd.suffixes"
+        "name.common", "name.official", 'name', "independent",
+        "unMember", "startOfWeek", "currencies", "capital",
+        "region", "subregion", "languages", "area", "population",
+        "continents", "idd.root", "idd.suffixes"
     ]
     flat_data = df_flat.loc[:, [
         col for col in columns_of_interest if col in df_flat.columns]]

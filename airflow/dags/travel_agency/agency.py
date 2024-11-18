@@ -2,7 +2,7 @@ from airflow import DAG
 from datetime import datetime
 from airflow.operators.python import PythonOperator
 from travel_agency.includes.publish_data import store_data_on_lake
-from travel_agency.includes.retrieve_data import (
+from retrieve_data import (
     retrieve_and_process_data)
 from airflow.providers.amazon.aws.operators.redshift_data import (
     RedshiftDataOperator)
@@ -29,15 +29,7 @@ with DAG(
         task_id='retrieve_data',
         python_callable=retrieve_and_process_data
     )
-    # create_table_task = RedshiftDataOperator(
-    #     task_id='create_country_info_table',
-    #     redshift_conn_id='redshift_default',
-    #     params={
-    #         "schema": "public",
-    #         "table": "country_info",
-    #     },
-    #     sql='/create_agency_table.sql',
-    # )
+
     # create redshift table
     create_table_task = RedshiftDataOperator(
         task_id="create_agency_table",
@@ -64,11 +56,6 @@ with DAG(
             "FORMAT AS PARQUET"
         ],
         method='REPLACE',
-        # column_list=[
-        #     "common_name", "independent", "unMember", "startOfWeek", "official_name",
-        #     "idd", "capital", "region", "subregion", "languages", "area", "population",
-        #     "currency_code", "currency_name", "currency_symbol", "continents"
-        # ]
     )
 
 

@@ -10,7 +10,7 @@ airflow/logs
 airflow/airflow.db
 *.csv
 terraform/.terraform.lock.hcl
-README.md
+jotter.md
 dbt/travel_agency/dbt_packages/
 dbt/travel_agency/logs/
 airflow/airflow-webserver.pid
