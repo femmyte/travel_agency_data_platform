@@ -51,7 +51,7 @@ with DAG(
             "table": "country_info",
         },
     )
-    # get transformed data from s3 bucket
+    # load transformed data from s3 bucket to Redshift
     s3_to_redshift = S3ToRedshiftOperator(
         task_id='s3_to_redshift',
         schema='public',
