@@ -28,21 +28,22 @@ data-driven decisions.
     -   Amazon Redshift: Data warehouse used to store processed data for
         analysis.
     -   Amazon ECR: Docker image repository for containerized services.
-    -   Apache Airflow: Manages and orchestrates the ETL workflow.
 
-2.  DBT (Data Build Tool): Handles data transformation and modeling inside
+2.  Apache Airflow: Manages and orchestrates the ETL workflow.
+
+3.  DBT (Data Build Tool): Handles data transformation and modeling inside
     Redshift.
 
-3.  Docker: Containerizes the application for consistent deployment
+4.  Docker: Containerizes the application for consistent deployment
     environments.
 
-4.  Terraform: Used for infrastructure provisioning, ensuring the environment is
+5.  Terraform: Used for infrastructure provisioning, ensuring the environment is
     automatically and consistently set up.
 
-5.  GitHub Actions: Facilitates Continuous Integration and Continuous Deployment
+6.  GitHub Actions: Facilitates Continuous Integration and Continuous Deployment
     (CI/CD), including code linting, testing, and deploying Docker images.
 
-6.  Python Libraries:
+7.  Python Libraries:
     -   awswrangler: Interacts with AWS services for data loading and retrieval.
     -   requests: Used for making HTTP requests to the travel API for data
         extraction.
@@ -89,27 +90,27 @@ reliability.
 
 ## Clone the Repository
 
-` git clone https://github.com/femmyte/travel_agency_data_platform.git`\
- ` cd travel_agency_data_platform`
+        git clone https://github.com/femmyte/travel_agency_data_platform.git
+        cd travel_agency_data_platform`
 
 ## Set Up AWS Credentials
 
 Make sure your AWS credentials are properly configured either through the
 ~/.aws/credentials file or by exporting them as environment variables:
 
-`export AWS_ACCESS_KEY_ID=your-access-key-id`\
-`export AWS_SECRET_ACCESS_KEY=your-secret-access-key`
+        export AWS_ACCESS_KEY_ID=your-access-key-id
+        export AWS_SECRET_ACCESS_KEY=your-secret-access-key
 
 ### Provision Infrastructure with Terraform
 
 Navigate to the terraform directory and initialize Terraform:
 
-`cd terraform` \
-`terraform init`
+        cd terraform
+        terraform init
 
 To provision the infrastructure, run:
 
-`terraform apply`
+        terraform apply
 
 Confirm the action to provision the necessary AWS resources such as S3 buckets,
 Redshift clusters, and ECR.
@@ -118,36 +119,36 @@ Redshift clusters, and ECR.
 
 -   Running the ETL Pipeline Start Apache Airflow using Docker Compose:
 
-        - docker-compose up
+        docker-compose up
 
     Access the Airflow UI at http://localhost:8080 and trigger the DAG
     responsible for the ETL process.
 
-        - Running DBT Transformations Navigate to the dbt directory and install
-
+-   Running DBT Transformations Navigate to the dbt directory and install
     dependencies:
 
-`cd dbt`\
-`dbt deps` \
+        cd dbt
+        dbt deps
 
 Run the DBT models to create fact and dimension tables in Redshift: \
 
-`dbt run`\
+        dbt run
 
 ## CI/CD Pipeline
 
 The project includes a GitHub Actions workflow for continuous integration and
 deployment. The workflow:
 
-    - Runs flake8 to lint the code and ensure it adheres to Python style guidelines.
-    - Builds and pushes the Docker image to Amazon ECR.
-    - Deploys the Docker container using the updated image.
+-   Runs flake8 to lint the code and ensure it adheres to Python style
+    guidelines.
+-   Builds and pushes the Docker image to Amazon ECR.
+-   Deploys the Docker container using the updated image.
 
 Ensure you set the following GitHub secrets in your repository for the CI/CD
 pipeline:
 
--   `AWS_ACCESS_KEY_ID` \
--   ` AWS_SECRET_ACCESS_KEY ECR_URI` \
+-   `AWS_ACCESS_KEY_ID`
+-   `AWS_SECRET_ACCESS_KEY ECR_URI`
 
 ## Challenges and Solutions
 
